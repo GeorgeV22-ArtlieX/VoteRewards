@@ -123,9 +123,9 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}
 		if (getConfig().getBoolean("Options.Reminder.Enabled"))
-			reminder().cancel();
+			c1.cancel();
 		if (getConfig().getBoolean("Options.Daily"))
-			onDaily().cancel();
+			b.cancel();
 		addMessage("Plugin successfully unloaded");
 	}
 
@@ -202,7 +202,6 @@ public class Main extends JavaPlugin implements Listener {
 										}
 									}
 								}
-								rs.close();
 							}
 
 						} catch (Exception e) {
