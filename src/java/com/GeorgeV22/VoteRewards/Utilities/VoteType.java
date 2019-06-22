@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.GeorgeV22.VoteRewards.Main;
+import com.GeorgeV22.VoteRewards.Utilities.LastVote.Date;
 import com.GeorgeV22.VoteRewards.Utilities.Messages.Message;
 import com.GeorgeV22.VoteRewards.Utilities.Messages.MessageType;
 
@@ -58,19 +59,21 @@ public class VoteType {
 
 	private void processDailyVote(Player player) {
 		if (m.getConfig().getBoolean("Options.Daily")) {
-			int b1 = m.getData().getInt("Players." + player.getUniqueId().toString() + ".dailyvotes");
-			m.getData().set("Players." + player.getUniqueId().toString() + ".dailyvotes", b1 + 1);
-			m.getData().save();
-			for (String s : m.getConfig().getConfigurationSection("Rewards.daily").getKeys(false)) {
-				if (b1 == Integer.valueOf(s)) {
-					for (String b : m.getConfig().getStringList("Rewards.daily." + s)) {
-						executeCommands(b.replace("%player%", player.getName()));
+			LastVote lastVote = new LastVote();
+			Date date = new Date(System.currentTimeMillis());
+			Date date1 = new Date(m.getData().getLong(""));
+			if (lastVote.compare(date, date1) == 0) {
+				int b = m.getData().getInt("Players." + player.getUniqueId().toString() + ".dailyvotes");
+				for (String s : m.getConfig().getConfigurationSection("Rewards.daily").getKeys(false)) {
+					if (b == Integer.valueOf(s) - 1) {
+						for (String a : m.getConfig().getStringList("Rewards.daily." + s))
+							executeCommands(a.replace("%player%", player.getName()));
 					}
 					m.addMessage("Processed daily vote by" + player.getName() + " with " + s + " votes");
 				}
+
 			}
 		}
-
 	}
 
 	private void processLuckyVote(Player p) {

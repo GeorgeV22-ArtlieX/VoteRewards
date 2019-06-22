@@ -64,6 +64,7 @@ import com.GeorgeV22.VoteRewards.Title.Versions.Title_v1_8_R2;
 import com.GeorgeV22.VoteRewards.Title.Versions.Title_v1_8_R3;
 import com.GeorgeV22.VoteRewards.Title.Versions.Title_v1_9_R1;
 import com.GeorgeV22.VoteRewards.Title.Versions.Title_v1_9_R2;
+import com.GeorgeV22.VoteRewards.Utilities.LastVote;
 import com.GeorgeV22.VoteRewards.Utilities.UUIDFetcher;
 import com.GeorgeV22.VoteRewards.Utilities.Utils;
 import com.GeorgeV22.VoteRewards.Utilities.Votes;
@@ -122,10 +123,6 @@ public class Main extends JavaPlugin implements Listener {
 				addMessage("Plugin unloaded under error: " + e.getStackTrace());
 			}
 		}
-		if (getConfig().getBoolean("Options.Reminder.Enabled"))
-			c1.cancel();
-		if (getConfig().getBoolean("Options.Daily"))
-			b.cancel();
 		addMessage("Plugin successfully unloaded");
 	}
 
@@ -212,14 +209,24 @@ public class Main extends JavaPlugin implements Listener {
 						if (data.get("Players") != null)
 							for (String s : data.getConfigurationSection("Players").getKeys(false)) {
 								// date.getTime() - current.getTime() >= 43200000
-								long configTime = data.getLong("Players." + s + ".time");
-								long timeNow = System.currentTimeMillis();
-								if (timeNow >= configTime) {
-									if (getData().getInt("Players." + s + ".dailyvotes") != 0) {
-										getData().set("Players." + s + ".dailyvotes", 0);
-										getData().save();
-										addMessage("Daily votes for " + s + " changed to 0");
-									}
+								// long configTime = data.getLong("Players." + s + ".time");
+								// long timeNow = System.currentTimeMillis();
+								// if (timeNow >= configTime) {
+								// if (getData().getInt("Players." + s + ".dailyvotes") != 0) {
+								// getData().set("Players." + s + ".dailyvotes", 0);
+								// getData().save();
+								// addMessage("Daily votes for " + s + " changed to 0");
+								// }
+								// }
+								LastVote lastVote = new LastVote();
+								com.GeorgeV22.VoteRewards.Utilities.LastVote.Date current = new com.GeorgeV22.VoteRewards.Utilities.LastVote.Date(
+										System.currentTimeMillis());
+								com.GeorgeV22.VoteRewards.Utilities.LastVote.Date last = new com.GeorgeV22.VoteRewards.Utilities.LastVote.Date(
+										data.getLong("Players." + s + ".time"));
+								if (lastVote.compare(current, last) != 0) {
+									getData().set("Players." + s + ".dailyvotes", 0);
+									getData().save();
+									addMessage("Daily votes for " + s + " changed to 0");
 								}
 							}
 					}

@@ -69,15 +69,17 @@ public class Votes {
 
 			int f = m.getData().getInt("VoteParty_Votes");
 			m.getData().set("VoteParty_Votes", f + 1);
-			long fb = System.currentTimeMillis() + (1000 * 3600 * 12);
+			long fb = System.currentTimeMillis()/* + (1000 * 3600 * 12) */;
 			m.getData().set("Players." + p.getUniqueId().toString() + ".time", fb);
+			int ab = m.getData().getInt("Players." + p.getUniqueId().toString() + ".dailyvotes");
+			m.getData().set("Players." + p.getUniqueId().toString() + ".dailyvotes", ab + 1);
 			new BukkitRunnable() {
 
 				@Override
 				public void run() {
 					m.getData().save();
 				}
-			}.runTaskLater(m, 20 * 5);
+			}.runTaskLater(m, 20 * 3);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -119,7 +121,7 @@ public class Votes {
 
 			int f = m.getData().getInt("VoteParty_Votes");
 			m.getData().set("VoteParty_Votes", f + 1);
-			long fb = System.currentTimeMillis() + (1000 * 3600 * 12);
+			long fb = System.currentTimeMillis() /* + (1000 * 3600 * 12) */;
 			m.getData().set("Players." + uuid + ".time", fb);
 			m.getData().save();
 			m.addMessage("Processed Offline vote for " + uuid);
