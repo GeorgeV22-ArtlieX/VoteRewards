@@ -14,22 +14,37 @@ public class PAPI extends PlaceholderExpansion {
 		this.plugin = plugin;
 	}
 
+	@Override
 	public String getIdentifier() {
 		return "voterewards";
 	}
 
+	@Override
 	public String getPlugin() {
 		return "VoteRewards";
 	}
 
+	@Override
 	public String getAuthor() {
 		return "ArtlieX";
 	}
 
+	@Override
 	public String getVersion() {
 		return plugin.getDescription().getVersion();
 	}
 
+	@Override
+	public boolean persist() {
+		return true;
+	}
+
+	@Override
+	public boolean canRegister() {
+		return true;
+	}
+
+	@Override
 	public String onPlaceholderRequest(Player player, String identifier) {
 		if (player == null) {
 			return "null";
